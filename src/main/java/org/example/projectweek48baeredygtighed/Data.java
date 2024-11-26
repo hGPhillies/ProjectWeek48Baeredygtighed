@@ -1,6 +1,7 @@
 package org.example.projectweek48baeredygtighed;
 
-import java.util.Date;
+
+import java.sql.Date;
 
 public class Data {
 
