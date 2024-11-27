@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 import java.io.*;
@@ -18,6 +19,8 @@ public class HelloController {
     BarChart<String, Number> barChart;
     @FXML
     LineChart<String, Number> lineChart;
+    @FXML
+    Button clearButton,goButton;
 
     private ArrayList<Data> dataArrayList;
 
@@ -28,6 +31,19 @@ public class HelloController {
         updateDataFromSource();
 
         printAllData();
+    }
+    @FXML
+    public void goButton()
+    {
+        displayBarChart();
+        displayLineChart();
+    }
+
+    @FXML
+    public void buttonClear()
+    {
+        lineChart.getData().clear();
+        barChart.getData().clear();
     }
 
     /**
@@ -142,16 +158,5 @@ public class HelloController {
                 }
             }
         }
-
-        //Method to clear the charts of data.
-    /*
-    @FXML
-    public void buttonClear()
-    {
-        lineChart.getData().clear();
-        barChart.getData().clear();
-    }
-
-     */
     }
 }
