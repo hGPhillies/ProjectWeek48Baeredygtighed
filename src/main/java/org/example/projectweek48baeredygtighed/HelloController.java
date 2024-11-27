@@ -25,14 +25,13 @@ public class HelloController {
     private VBox vBox;
 
     @FXML
-    private TextField siteId1, getSiteId2;
+    private TextField siteId1, siteId2;
 
 
     private ArrayList<Data> dataArrayList;
 
     @FXML
-    public void initialize() throws IOException
-    {
+    public void initialize() throws IOException {
         dataArrayList = new ArrayList<>();
 
         ArrayList<String[]> data = new ArrayList<>(); //initializing a new ArrayList out of String[]'s
@@ -48,18 +47,12 @@ public class HelloController {
                 String date = "";
                 String time = "";
                 boolean isDate = true;
-                for (char c : lineItems[1].toCharArray())
-                {
-                    if (c == 'T')
-                    {
+                for (char c : lineItems[1].toCharArray()) {
+                    if (c == 'T') {
                         isDate = false;
-                    }
-                    else if (isDate)
-                    {
+                    } else if (isDate) {
                         date += c;
-                    }
-                    else
-                    {
+                    } else {
                         time += c;
                     }
 
@@ -88,25 +81,15 @@ public class HelloController {
             System.out.println(e.getMessage());
         }
 
-        for (Data dataItem : dataArrayList)
-        {
+        for (Data dataItem : dataArrayList) {
             System.out.println(dataItem.getId() + "\t" + dataItem.getDate() + "\t" + dataItem.getHour() + "\t" + dataItem.getSiteId() +
                     "\t" + dataItem.getTotal() + "\t" + dataItem.getOnline() + "\t" + dataItem.getOffline());
         }
+
+        List<String> siteIds = List.of("298", "2506", "15523", "16008", "16009", "16010", "16011", "16012", "16013", "16014", "16015", "16016", "16017", "16018", "16019", "16020", "16021", "16022", "16023", "16024", "16025", "22224", "22229", "41460", "54280", "54282", "54284", "54286", "54288", "54290", "54292", "54294", "54374", "54376", "54378", "54384", "54386", "54388", "54390", "54392", "54394", "54396", "54399", "54401", "54403", "54405", "54407", "54409", "54411", "54449", "57115", "57116", "57117", "57119", "57120", "57122", "57123", "57124", "57126", "60127", "60129", "60131", "82445", "84671", "84673", "87887", "87891", "88062", "88262", "88990", "92029"
+        );
+
+        TextFields.bindAutoCompletion(siteId1, siteIds);
+        TextFields.bindAutoCompletion(siteId2, siteIds);
     }
-
-    @FXML
-    protected void buttonGo()
-    {
-        for (Data d: dataArrayList)
-        {
-            if (d.)
-            {
-
-            }
-        }
-    }
-
-
-
 }
