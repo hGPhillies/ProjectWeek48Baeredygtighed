@@ -8,7 +8,7 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="437.0" prefWidth="701.0" style="-fx-background-color: #e4f3ff;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectweek48baeredygtighed.HelloController">
    <children>
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="123.0" prefWidth="701.0" text="Label" textOverrun="CLIP">
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="78.0" prefWidth="701.0" text="Label" textOverrun="CLIP">
          <padding>
             <Insets left="8.0" right="8.0" />
          </padding>
@@ -61,27 +61,31 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <ChoiceBox fx:id="Hour" prefHeight="93.0" prefWidth="264.0" GridPane.rowIndex="1">
-                     <padding>
+                  <ChoiceBox fx:id="Online" prefHeight="83.0" prefWidth="288.0"  GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
                         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-                     </padding>
+                     </GridPane.margin></ChoiceBox>
+                  <ChoiceBox fx:id="Total" prefHeight="105.0" prefWidth="305.0"  GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets bottom="3.0" left="8.0" right="3.0" top="3.0" />
                      </GridPane.margin></ChoiceBox>
-                  <ChoiceBox fx:id="Online" prefHeight="83.0" prefWidth="288.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <ChoiceBox fx:id="Offline" prefHeight="72.0" prefWidth="250.0"  GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
                      </GridPane.margin></ChoiceBox>
-                  <ChoiceBox fx:id="Total" prefHeight="105.0" prefWidth="305.0" GridPane.rowIndex="2">
+                  <TextField fx:id="siteIdOne" onAction="#displayBarChart" prefHeight="40.0" prefWidth="239.0" promptText="Search SID">
                      <GridPane.margin>
                         <Insets bottom="3.0" left="8.0" right="3.0" top="3.0" />
-                     </GridPane.margin></ChoiceBox>
-                  <ChoiceBox fx:id="Offline" prefHeight="72.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     </GridPane.margin></TextField>
+                  <TextField fx:id="siteIdTwo" onAction="#displayLineChart" prefHeight="40.0" prefWidth="239.0" promptText="Search SID" GridPane.columnIndex="1">
                      <GridPane.margin>
                         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-                     </GridPane.margin></ChoiceBox>
-                  <TextField fx:id="siteIdOne" onAction="#displayBarChart" prefHeight="40.0" prefWidth="239.0" promptText="Search SID" />
-                  <TextField fx:id="siteIdTwo" onAction="#displayLineChart" prefHeight="40.0" prefWidth="239.0" promptText="Search SID" GridPane.columnIndex="1" />
+                     </GridPane.margin></TextField>
+                  <DatePicker prefHeight="110.0" prefWidth="320.0" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets bottom="3.0" left="8.0" right="3.0" top="3.0" />
+                     </GridPane.margin>
+                  </DatePicker>
                </children>
             </GridPane>
             <VBox prefHeight="100.0" prefWidth="364.0">
@@ -104,7 +108,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="Go" mnemonicParsing="false" onAction="#goButton" prefHeight="349.0" prefWidth="418.0" text="GO">
+            <Button fx:id="Go" mnemonicParsing="false" onAction="#goButton" prefHeight="349.0" prefWidth="418.0" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #ffffff; -fx-background-color: #50a7b8; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 10 20;" text="GO">
                <GridPane.margin>
                   <Insets bottom="3.0" right="3.0" top="3.0" />
                </GridPane.margin>
@@ -112,7 +116,7 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Button>
-            <Button fx:id="Clear" mnemonicParsing="false" onAction="#buttonClear" prefHeight="135.0" prefWidth="421.0" text="Clear" GridPane.columnIndex="1">
+            <Button fx:id="Clear" mnemonicParsing="false" onAction="#buttonClear" prefHeight="135.0" prefWidth="421.0" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #ffffff; -fx-background-color: #50a7b8; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 10 20;" text="Clear" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets bottom="3.0" left="3.0" top="3.0" />
                </GridPane.margin>
