@@ -20,9 +20,7 @@ import java.util.List;
 
 public class HelloController {
     @FXML
-    TextField siteIdTwo;
-    @FXML
-    ComboBox<String> siteIdOneCombo;
+    ComboBox<String> siteIdOneCombo, siteIdTwoCombo;
     @FXML
     BarChart<String, Number> barChart;
     @FXML
@@ -48,10 +46,15 @@ public class HelloController {
         updateDataFromSource();
         printAllData();
         addFilterToComboBoxes(siteIdOneCombo);
+        addFilterToComboBoxes(siteIdTwoCombo);
 
         siteIdOneCombo.setItems(FXCollections.observableArrayList(siteIds));
         siteIdOneCombo.setEditable(true);
+
+        siteIdTwoCombo.setItems(FXCollections.observableArrayList(siteIds));
+        siteIdTwoCombo.setEditable(true);
     }
+
     @FXML
     public void goButton()
     {
@@ -67,10 +70,21 @@ public class HelloController {
     }
 
     @FXML
-    public void chooseSiteIDOne()
+    public void chooseSiteID()
     {
-        String selectedSiteId = siteIdOneCombo.getValue();
-        System.out.println("Chosen site ID: " + selectedSiteId);
+        String selectedSiteIdOne = siteIdOneCombo.getValue();
+        String selectedSiteIdTwo = siteIdTwoCombo.getValue();
+
+        if(selectedSiteIdOne == null && !selectedSiteIdOne.isEmpty())
+        {
+            System.out.println("Chosen site ID: " + selectedSiteIdOne);
+        }
+
+        if(selectedSiteIdTwo == null && !selectedSiteIdTwo.isEmpty())
+        {
+            System.out.println("Chosen site ID: " + selectedSiteIdTwo);
+        }
+
     }
 
     public void addFilterToComboBoxes(ComboBox<String> comboFilter)
@@ -104,8 +118,10 @@ public class HelloController {
             {
                 System.out.println("Invalid choice: " + selectedItem);
                 comboFilter.setValue(null);
+            } else
+            {
+                System.out.println("Valid choice from " + comboFilter.getId() + ": " + selectedItem);
             }
-            System.out.println(selectedItem);
         });
     }
 
@@ -214,7 +230,7 @@ public class HelloController {
         int largestNum = 0;
 
         for (Data dataItem : dataArrayList) {
-            if (dataItem.getSiteId() == Integer.parseInt(siteIdTwo.getText())) {
+            if (dataItem.getSiteId() == Integer.parseInt(siteIdTwoCombo.getValue())) {
                 if (dataItem.getDate().toString().equalsIgnoreCase("2023-02-13")) {
                     if (dataItem.getOnline() > largestNum) {
                         largestNum = dataItem.getOnline();
