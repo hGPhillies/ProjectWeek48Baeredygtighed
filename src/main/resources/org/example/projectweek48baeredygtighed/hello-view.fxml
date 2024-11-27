@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="437.0" prefWidth="701.0" style="-fx-background-color: #e4f3ff;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="vBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="437.0" prefWidth="701.0" style="-fx-background-color: #e4f3ff;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectweek48baeredygtighed.HelloController">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="123.0" prefWidth="701.0" text="Label" textOverrun="CLIP">
          <padding>
@@ -17,7 +17,7 @@
          </font></Label>
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
-            <BarChart>
+            <BarChart fx:id="barChart">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -28,7 +28,7 @@
                   <Insets left="3.0" right="3.0" />
                </padding>
             </BarChart>
-            <LineChart>
+            <LineChart fx:id="lineChart">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -39,7 +39,7 @@
                   <Insets left="3.0" right="3.0" />
                </padding>
             </LineChart>
-            <PieChart>
+            <PieChart fx:id="pieChart">
                <padding>
                   <Insets left="3.0" right="3.0" />
                </padding></PieChart>
@@ -61,33 +61,34 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <ChoiceBox fx:id="Date" prefHeight="98.0" prefWidth="252.0">
-                     <GridPane.margin>
-                        <Insets bottom="3.0" left="8.0" right="3.0" top="3.0" />
-                     </GridPane.margin></ChoiceBox>
-                  <ChoiceBox fx:id="SiteId" prefHeight="119.0" prefWidth="270.0" GridPane.columnIndex="1">
-                     <GridPane.margin>
-                        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-                     </GridPane.margin></ChoiceBox>
-                  <ChoiceBox fx:id="Hour" prefHeight="93.0" prefWidth="264.0" GridPane.rowIndex="1">
+                  <ChoiceBox fx:id="month1" maxHeight="39.0" maxWidth="226.0" minHeight="39.0" prefHeight="39.0" GridPane.rowIndex="1">
                      <padding>
                         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
                      </padding>
                      <GridPane.margin>
                         <Insets bottom="3.0" left="8.0" right="3.0" top="3.0" />
                      </GridPane.margin></ChoiceBox>
-                  <ChoiceBox fx:id="Online" prefHeight="83.0" prefWidth="288.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-                     </GridPane.margin></ChoiceBox>
-                  <ChoiceBox fx:id="Total" prefHeight="105.0" prefWidth="305.0" GridPane.rowIndex="2">
+                  <ChoiceBox fx:id="month2" maxWidth="226.0" prefHeight="83.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets bottom="3.0" left="8.0" right="3.0" top="3.0" />
                      </GridPane.margin></ChoiceBox>
-                  <ChoiceBox fx:id="Offline" prefHeight="72.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <ChoiceBox fx:id="hour1" maxHeight="39.0" maxWidth="226.0" minHeight="39.0" prefHeight="39.0" GridPane.rowIndex="2">
                      <GridPane.margin>
-                        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                        <Insets bottom="3.0" left="8.0" right="3.0" top="3.0" />
                      </GridPane.margin></ChoiceBox>
+                  <ChoiceBox fx:id="hour2" maxWidth="226.0" prefHeight="39.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets bottom="3.0" left="8.0" right="3.0" top="3.0" />
+                     </GridPane.margin></ChoiceBox>
+                  <TextField fx:id="siteId1" alignment="CENTER" maxWidth="226.0" prefHeight="39.0">
+                     <GridPane.margin>
+                        <Insets left="8.0" />
+                     </GridPane.margin></TextField>
+                  <TextField fx:id="siteId2" alignment="CENTER" maxWidth="226.0" prefHeight="39.0" style="-fx-alignment: center;" GridPane.columnIndex="1">
+                     <GridPane.margin>
+                        <Insets left="8.0" />
+                     </GridPane.margin>
+                  </TextField>
                </children>
             </GridPane>
             <VBox prefHeight="100.0" prefWidth="364.0">
@@ -110,7 +111,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="Go" mnemonicParsing="false" prefHeight="349.0" prefWidth="418.0" text="GO">
+            <Button fx:id="go" mnemonicParsing="false" onAction="#buttonGo" prefHeight="349.0" prefWidth="418.0" text="GO">
                <GridPane.margin>
                   <Insets bottom="3.0" right="3.0" top="3.0" />
                </GridPane.margin>

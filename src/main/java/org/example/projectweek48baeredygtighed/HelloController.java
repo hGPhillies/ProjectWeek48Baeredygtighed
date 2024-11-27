@@ -1,14 +1,32 @@
 package org.example.projectweek48baeredygtighed;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import org.controlsfx.control.textfield.TextFields;
+import javafx.application.Application;
 
+import java.util.List;
 import java.io.*;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.Scanner;
 
+
 public class HelloController {
+
+    @FXML
+    private Button go;
+
+    @FXML
+    private VBox vBox;
+
+    @FXML
+    private TextField siteId1, getSiteId2;
+
 
     private ArrayList<Data> dataArrayList;
 
@@ -76,4 +94,19 @@ public class HelloController {
                     "\t" + dataItem.getTotal() + "\t" + dataItem.getOnline() + "\t" + dataItem.getOffline());
         }
     }
+
+    @FXML
+    protected void buttonGo()
+    {
+        for (Data d: dataArrayList)
+        {
+            if (d.)
+            {
+
+            }
+        }
+    }
+
+
+
 }
