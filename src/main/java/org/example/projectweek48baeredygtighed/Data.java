@@ -5,13 +5,13 @@ import java.sql.Date;
 
 public class Data {
 
-    private int id;
-    private int siteId;
-    private int total;
-    private int online;
-    private int offline;
-    private Date date;
-    private int hour;
+    private int id; // Record ID
+    private int siteId; // ID of the Solar Site
+    private int total; // Total lifetime production of the site.
+    private int online; // Online production of the site (While connected to the server/monitoring system)
+    private int offline; // Offline production of the site (While disconnected from the server/monitoring system)
+    private Date date; // Date of the production (year, month, day)
+    private int hour; // Hour of the record (What time a day the record is from)
 
 
     public int getId() {
