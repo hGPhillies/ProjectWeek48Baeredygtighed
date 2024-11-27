@@ -1,6 +1,11 @@
 package org.example.projectweek48baeredygtighed;
 
 import javafx.fxml.FXML;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -8,24 +13,31 @@ import java.sql.Date;
 
 
 public class HelloController {
+    @FXML
+    private TextField siteIdOne, siteIdTwo;
+    @FXML
+    private BarChart<String, Number> barChart;
+    @FXML
+    private Button goButton;
+    @FXML
+    private LineChart<String, Number> lineChart;
+
 
     private ArrayList<Data> dataArrayList;
 
     @FXML
-    public void initialize()
-    {
+    public void initialize() {
         // gets the data from the source. Should ALWAYS be first.
         updateDataFromSource();
 
-        printAllData();
+        //printAllData();
     }
 
     /**
      * Reads the SolarData.tsv file and adds all records to the dataArrayList ArrayList.
      * Gives error "Something went wrong" if the file is not found.
      */
-    private void updateDataFromSource()
-    {
+    private void updateDataFromSource() {
         dataArrayList = new ArrayList<>();
 
         // tries to get the file.
@@ -42,18 +54,12 @@ public class HelloController {
                 StringBuilder date = new StringBuilder();
                 StringBuilder time = new StringBuilder();
                 boolean isDate = true;
-                for (char c : lineItems[1].toCharArray())
-                {
-                    if (c == 'T')
-                    {
+                for (char c : lineItems[1].toCharArray()) {
+                    if (c == 'T') {
                         isDate = false;
-                    }
-                    else if (isDate)
-                    {
+                    } else if (isDate) {
                         date.append(c);
-                    }
-                    else
-                    {
+                    } else {
                         time.append(c);
                     }
 
@@ -84,12 +90,71 @@ public class HelloController {
     /**
      * Prints all data information in the console.
      */
-    private void printAllData()
-    {
-        for (Data dataItem : dataArrayList)
-        {
+    private void printAllData() {
+        for (Data dataItem : dataArrayList) {
             System.out.println(dataItem.getId() + "\t" + dataItem.getDate() + "\t" + dataItem.getHour() + "\t" + dataItem.getSiteId() +
                     "\t" + dataItem.getTotal() + "\t" + dataItem.getOnline() + "\t" + dataItem.getOffline());
         }
+    }
+
+    //Method to Use the Go button
+    @FXML
+    public void goButton() {
+        displayBarChart();
+        displayLineChart();
+    }
+
+
+    //Method to display Bar Chart
+    @FXML
+    public void displayBarChart() {
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Total Data");
+
+        int largestNum = 0;
+
+        for (Data dataItem : dataArrayList) {
+            if (dataItem.getSiteId() == Integer.parseInt(siteIdOne.getText())) {
+                if (dataItem.getDate().toString().equalsIgnoreCase("2023-02-13")) {
+                    if (dataItem.getTotal() > largestNum) {
+                        largestNum = dataItem.getTotal();
+                    }
+                }
+            }
+        }
+
+        series.getData().add(new XYChart.Data<>(String.valueOf(Integer.parseInt(siteIdOne.getText())), largestNum));
+        barChart.setAnimated(false);
+        barChart.getData().add(series);
+    }
+
+    @FXML
+    public void displayLineChart() {
+
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        series.setName("Online Data");
+
+        int largestNum = 0;
+
+        for (Data dataItem : dataArrayList) {
+            if (dataItem.getSiteId() == Integer.parseInt(siteIdTwo.getText())) {
+                if (dataItem.getDate().toString().equalsIgnoreCase("2023-02-13")) {
+                    if (dataItem.getOnline() > largestNum) {
+                        largestNum = dataItem.getOnline();
+                    }
+                }
+            }
+        }
+
+        //Method to clear the charts of data.
+    /*
+    @FXML
+    public void buttonClear()
+    {
+        lineChart.getData().clear();
+        barChart.getData().clear();
+    }
+
+     */
     }
 }
