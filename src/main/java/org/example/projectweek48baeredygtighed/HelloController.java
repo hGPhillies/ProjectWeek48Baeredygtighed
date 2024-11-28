@@ -3,8 +3,10 @@ package org.example.projectweek48baeredygtighed;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
+import javafx.geometry.Side;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.chart.BarChart;
@@ -17,7 +19,9 @@ import java.sql.Date;
 import java.util.List;
 
 
-
+/**
+ * A program that is able to show the user different
+ */
 
 public class HelloController {
     @FXML
@@ -35,8 +39,12 @@ public class HelloController {
     @FXML
     private VBox vBox;
 
+    @FXML
+    private DatePicker datePicker;
+
     private ArrayList<Data> dataArrayList;
 
+    //A list of each site ID to be used in the combobox as the option menu to select from
     List<String> siteIds = List.of("298", "2506", "15523", "16008", "16009", "16010", "16011", "16012", "16013", "16014", "16015", "16016",
             "16017", "16018", "16019", "16020", "16021", "16022", "16023", "16024", "16025", "22224", "22229", "41460", "54280", "54282", "54284",
             "54286", "54288", "54290", "54292", "54294", "54374", "54376", "54378", "54384", "54386", "54388", "54390", "54392", "54394", "54396",
@@ -48,15 +56,16 @@ public class HelloController {
     {
         // gets the data from the source. Should ALWAYS be first.
         updateDataFromSource();
-        printAllData();
+
         addFilterToComboBoxes(siteIdOneCombo);
         addFilterToComboBoxes(siteIdTwoCombo);
 
+        //Adds each site ID from "siteIds" to comboBox one as selection options
         siteIdOneCombo.setItems(FXCollections.observableArrayList(siteIds));
-        siteIdOneCombo.setEditable(true);
-
+        siteIdOneCombo.setEditable(true); //Enables the ComboBox to allow text input.
+        //Adds each site ID from "siteIds" to comboBox one as selection options
         siteIdTwoCombo.setItems(FXCollections.observableArrayList(siteIds));
-        siteIdTwoCombo.setEditable(true);
+        siteIdTwoCombo.setEditable(true); //Enables the ComboBox to allow text input.
     }
 
     @FXML
@@ -75,34 +84,43 @@ public class HelloController {
         pieChart.getData().clear();
     }
 
+    /**
+     * Assigns the value input from each comboBox and checks of the user has
+     * made an input with a valid site id.
+     */
     @FXML
     public void chooseSiteID()
     {
         String selectedSiteIdOne = siteIdOneCombo.getValue();
         String selectedSiteIdTwo = siteIdTwoCombo.getValue();
 
-        if(selectedSiteIdOne == null && !selectedSiteIdOne.isEmpty())
+        if(selectedSiteIdOne != null && !selectedSiteIdOne.isEmpty())
         {
             System.out.println("Chosen site ID: " + selectedSiteIdOne);
         }
 
-        if(selectedSiteIdTwo == null && !selectedSiteIdTwo.isEmpty())
+        if(selectedSiteIdTwo != null && !selectedSiteIdTwo.isEmpty())
         {
             System.out.println("Chosen site ID: " + selectedSiteIdTwo);
         }
 
     }
 
+    /**
+     * Ensures that the user can filter the predefined site IDs based on the input entered in the combobox.
+     * @param comboFilter Where the filtering functionality and event handling will be added.
+     */
     public void addFilterToComboBoxes(ComboBox<String> comboFilter)
     {
-        List<String> originalSiteIDs = new ArrayList<>(siteIds);
+        List<String> originalSiteIDs = new ArrayList<>(siteIds); //Provides a new list with the original site ids
 
+        //Adds a listener to the comboboxes that checks user input and uses it for filtering.
         comboFilter.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null || newValue.isEmpty())
             {
-                comboFilter.setItems(FXCollections.observableArrayList(originalSiteIDs));
+                comboFilter.setItems(FXCollections.observableArrayList(originalSiteIDs)); //The full list of site ids are shown when the comboboxes are empty.
             }
-            else
+            else //When the user makes input in the combobox a new list with the filtered site ids are made and displayed to the user
             {
                 String input = newValue.toLowerCase();
                 List<String> filteredSiteIDs = new ArrayList<>();
@@ -113,12 +131,12 @@ public class HelloController {
                         filteredSiteIDs.add(site);
                     }
                 }
-                comboFilter.setItems(FXCollections.observableArrayList(filteredSiteIDs));
+                comboFilter.setItems(FXCollections.observableArrayList(filteredSiteIDs)); //Filters the site ids based upon the input
             }
-            comboFilter.show();
+            comboFilter.show(); //Displays the filtered site ids to the user.
         });
 
-        comboFilter.setOnAction(event -> {
+        comboFilter.setOnAction(event -> { //Displays in the console whether the user has entered a valid site id or not.
             String selectedItem = comboFilter.getValue();
             if (!originalSiteIDs.contains(selectedItem))
             {
@@ -230,19 +248,38 @@ public class HelloController {
     @FXML
     public void displayLineChart() {
 
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        series.setName("Online Data");
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Production for " + datePicker.getValue());
 
-        int largestNum = 0;
+        boolean dataExists = false;
 
-        for (Data dataItem : dataArrayList) {
-            if (dataItem.getSiteId() == Integer.parseInt(siteIdTwoCombo.getValue())) {
-                if (dataItem.getDate().toString().equalsIgnoreCase("2023-02-13")) {
-                    if (dataItem.getOnline() > largestNum) {
-                        largestNum = dataItem.getOnline();
+        try {
+            for (Data dataItem : dataArrayList) {
+                if (dataItem.getSiteId() == Integer.parseInt(siteIdTwoCombo.getValue())) {
+                    if (dataItem.getDate().toString().equalsIgnoreCase(String.valueOf(datePicker.getValue()))) {
+                        series.getData().add(new XYChart.Data<>(String.valueOf(dataItem.getHour()), dataItem.getOnline()));
+                        dataExists = true;
                     }
                 }
             }
+        }
+        catch (Exception e) {
+            System.out.println("Something went wrong");
+            System.out.print(e.getMessage());
+        }
+
+
+        if (dataExists) {
+            lineChart.setAnimated(false);
+            lineChart.getData().add(series);
+            lineChart.setTitleSide(Side.RIGHT);
+            lineChart.setTitle("W/h");
+            lineChart.setTitleSide(Side.BOTTOM);
+            lineChart.setTitle("Hours");
+        }
+        else
+        {
+            System.out.println("The given Site does not have this date: " + datePicker.getValue());
         }
     }
     @FXML
