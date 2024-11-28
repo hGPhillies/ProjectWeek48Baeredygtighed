@@ -44,9 +44,6 @@ public class HelloController {
     @FXML
     private VBox vBox;
 
-    @FXML
-    private DatePicker datePicker;
-
     private ArrayList<Data> dataArrayList;
 
     //A list of each site ID to be used in the combobox as the option menu to select from
@@ -253,15 +250,14 @@ public class HelloController {
 
     @FXML
     public void displayLineChart() {
-
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Production for " + datePicker.getValue());
+        series.setName("Production of " + siteIdOneCombo.getValue());
 
         boolean dataExists = false;
 
         try {
             for (Data dataItem : dataArrayList) {
-                if (dataItem.getSiteId() == Integer.parseInt(siteIdTwoCombo.getValue())) {
+                if (dataItem.getSiteId() == Integer.parseInt(siteIdOneCombo.getValue())) {
                     if (dataItem.getDate().toString().equalsIgnoreCase(String.valueOf(datePicker.getValue()))) {
                         series.getData().add(new XYChart.Data<>(String.valueOf(dataItem.getHour()), dataItem.getOnline()));
                         dataExists = true;
@@ -315,9 +311,6 @@ public class HelloController {
 
         // Add data to the PieChart
         pieChart.getData().addAll(siteOneData, siteTwoData);
-    }
-
-
     }
 
     @FXML
