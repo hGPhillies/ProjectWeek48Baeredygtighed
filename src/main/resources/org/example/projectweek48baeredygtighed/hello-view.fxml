@@ -54,8 +54,8 @@
                   <Insets left="3.0" right="3.0" />
                </padding>
             </LineChart>
-            <PieChart>
-               <padding>
+             <PieChart fx:id="pieChart" layoutX="50" layoutY="300" prefHeight="200" prefWidth="400" >
+             <padding>
                   <Insets left="3.0" right="3.0" />
                </padding></PieChart>
          </children>

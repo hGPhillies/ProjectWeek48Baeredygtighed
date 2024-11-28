@@ -2,6 +2,7 @@ package org.example.projectweek48baeredygtighed;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -26,7 +27,10 @@ public class HelloController {
     @FXML
     LineChart<String, Number> lineChart;
     @FXML
+    PieChart pieChart;
+    @FXML
     Button clearButton,goButton;
+
 
     @FXML
     private VBox vBox;
@@ -60,6 +64,7 @@ public class HelloController {
     {
         displayBarChart();
         displayLineChart();
+        displayPieChart();
     }
 
     @FXML
@@ -67,6 +72,7 @@ public class HelloController {
     {
         lineChart.getData().clear();
         barChart.getData().clear();
+        pieChart.getData().clear();
     }
 
     @FXML
@@ -239,4 +245,34 @@ public class HelloController {
             }
         }
     }
+    @FXML
+    public void displayPieChart() {
+        // Get selected site IDs
+        String selectedSiteIdOne = siteIdOneCombo.getValue();
+        String selectedSiteIdTwo = siteIdTwoCombo.getValue();
+
+
+        // Variables to store total values for the selected site IDs
+        int totalSiteOne = 0;
+        int totalSiteTwo = 0;
+
+        // Calculate totals for each site
+        for (Data dataItem : dataArrayList) {
+            if (dataItem.getSiteId() == Integer.parseInt(selectedSiteIdOne)) {
+                totalSiteOne += dataItem.getTotal();
+            }
+            if (dataItem.getSiteId() == Integer.parseInt(selectedSiteIdTwo)) {
+                totalSiteTwo += dataItem.getTotal();
+            }
+        }
+
+        // Create PieChart data
+        PieChart.Data siteOneData = new PieChart.Data("Site " + selectedSiteIdOne, totalSiteOne);
+        PieChart.Data siteTwoData = new PieChart.Data("Site " + selectedSiteIdTwo, totalSiteTwo);
+
+        // Add data to the PieChart
+        pieChart.getData().addAll(siteOneData, siteTwoData);
+    }
+
+
 }
