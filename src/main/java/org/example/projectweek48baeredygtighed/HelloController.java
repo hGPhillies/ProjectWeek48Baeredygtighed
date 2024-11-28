@@ -248,6 +248,9 @@ public class HelloController {
         barChart.getData().add(series);
     }
 
+    /**
+     * Adds data to the LineChart based on the selected Date and Site ID.
+     */
     @FXML
     public void displayLineChart() {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
