@@ -61,7 +61,6 @@ public class HelloController {
     public void initialize() {
         // Gets the data from the source. Should ALWAYS be first.
         updateDataFromSource();
-        getDateMonth();
 
         addFilterToComboBoxes(siteIdOneCombo);
 
@@ -76,6 +75,7 @@ public class HelloController {
         displayLineChart();
         displayTextArea();
         displayPieChart();
+        getMonthCalc();
     }
 
     @FXML
@@ -200,9 +200,13 @@ public class HelloController {
     }
 
 
+    /**
+     * A method that grey scales the dates where the site has not been active.
+     */
     @FXML
-    public void getDateMonth()
+    public void getMonthCalc()
     {
+        //Stores the input of the combobox in selectedSite ID and if the combobox is empty a String is returned and stops the method if so.
         String selectedSiteId = siteIdOneCombo.getValue();
         if (selectedSiteId == null || selectedSiteId.isEmpty())
         {
@@ -210,35 +214,45 @@ public class HelloController {
             return;
         }
 
-        int siteId = Integer.parseInt(selectedSiteId);
+        int siteId = Integer.parseInt(selectedSiteId); //Stores the siteId as Integers to be held against the dataArrayList.
 
+        //Stores another arraylist with the filtered results from the site ids based on the dataArrayList.
         ArrayList<Data> filteredData = new ArrayList<>();
-        for (Data dataItem : dataArrayList) {
-            if (dataItem.getSiteId() == siteId) {
-                filteredData.add(dataItem);
+        for (Data resultFilter : dataArrayList) {
+            if (resultFilter.getSiteId() == siteId) {
+                filteredData.add(resultFilter);
             }
         }
 
+        //Checks filtered data, if the site ID doesn't exists a String is returned and stops the method if so.
+        if (filteredData.isEmpty()) {
+            System.out.println("No data found for Site ID: " + siteId);
+            return;
+        }
+
+        /*
+        Finds and stores the first and last date for the chosen site id.
+        Whenever a new site id is chosen it checks again whether the date has changed and stores new dates if so.
+         */
         Date minDate = filteredData.getFirst().getDate();
         Date maxDate = filteredData.getFirst().getDate();
-
-        for (Data item : filteredData)
+        for (Data dates : filteredData)
         {
-            if (item.getDate().before(minDate))
+            if (dates.getDate().before(minDate))
             {
-                minDate = item.getDate();
+                minDate = dates.getDate();
             }
-            if(item.getDate().after(maxDate))
+            if(dates.getDate().after(maxDate))
             {
-                maxDate = item.getDate();
+                maxDate = dates.getDate();
             }
         }
-        System.out.println("Date to choose from from site: " + siteId+ ": " + minDate + " - " + maxDate);
 
         LocalDate localMinDate = minDate.toLocalDate();
         LocalDate localMaxDate = maxDate.toLocalDate();
 
-        datePicker.setDayCellFactory(d ->
+        //Makes sure that datePicker grey scales all dates out of the range from minDate and maxDate.
+        datePicker.setDayCellFactory(_ ->
                 new DateCell() {
                     @Override
                     public void updateItem(LocalDate item, boolean empty) {
@@ -246,8 +260,39 @@ public class HelloController {
                         setDisable(item.isAfter(localMaxDate) || item.isBefore(localMinDate));
                     }
                 });
+
+        //Stores the selected date from the datePicker in selectedDate if empty a String is returned
+        LocalDate selectedDate = datePicker.getValue();
+        if (selectedDate == null) {
+            System.out.println("No date selected in DatePicker.");
+            return;
         }
 
+        int selectedYear = selectedDate.getYear(); //Stores the selected year in a variable.
+        int selectedMonth = selectedDate.getMonthValue(); //Stores the selected month in a variable.
+        int totalForMonth = 0; //A variable that holds the sum for the month
+
+        //A loop that sorts through the filtered data for the chosen site, month and year and adds all the data together.
+        for (Data monthFilter : dataArrayList) {
+            if (monthFilter.getSiteId() == siteId) {
+                LocalDate dataDate = monthFilter.getDate().toLocalDate();
+                if (dataDate.getYear() == selectedYear && dataDate.getMonthValue() == selectedMonth)
+                {
+                    totalForMonth += monthFilter.getOnline();
+                }
+            }
+        }
+        /*
+        Clears the date in the barChart and adds data to the barChart.
+         */
+        //barChart.getData().clear();
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Total for " + selectedDate.getMonth() + " " + selectedYear);
+        series.getData().add(new XYChart.Data<>("Site ID: " + siteId, totalForMonth));
+        barChart.getData().add(series);
+
+        System.out.println("Total for Site " + siteId + " in " + selectedDate.getMonth() + " " + selectedYear + "is: " + totalForMonth + "kWh");
+    }
 
 
     //Method to display Bar Chart
