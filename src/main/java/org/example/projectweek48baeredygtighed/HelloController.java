@@ -154,22 +154,7 @@ public class HelloController {
         });
     }
 
-    @FXML
-    public void getDateMonth()
-    {
-        Date minDate;
-        Date maxDate;
 
-        minDate = Date.valueOf(LocalDate.of(2022, 12, 15));
-        maxDate = Date.valueOf(LocalDate.of(2023, 2, 14));
-        datePicker.setDayCellFactory(d ->
-                new DateCell() {
-                    @Override public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        setDisable(item.isAfter(maxDate.toLocalDate()) || item.isBefore(minDate.toLocalDate()));
-                    }});
-        //textArea.setText(formattedDate);
-    }
 
     /**
      * Reads the SolarData.tsv file and adds all records to the dataArrayList ArrayList.
@@ -243,6 +228,59 @@ public class HelloController {
                     "\t" + dataItem.getTotal() + "\t" + dataItem.getOnline() + "\t" + dataItem.getOffline());
         }
     }
+
+    @FXML
+    public void getDateMonth()
+    {
+        String selectedSiteId = siteIdOneCombo.getValue();
+        if (selectedSiteId == null || selectedSiteId.isEmpty())
+        {
+            System.out.println("No site selected");
+            return;
+        }
+
+        int siteId = Integer.parseInt(selectedSiteId);
+
+        ArrayList<Data> filteredData = new ArrayList<>();
+        for (Data dataItem : dataArrayList) {
+            if (dataItem.getSiteId() == siteId) {
+                filteredData.add(dataItem);
+            }
+            if (filteredData.isEmpty()) {
+                System.out.println("No data found for siteID" + siteId);
+            }
+
+            Date minDate = filteredData.get(0).getDate();
+            Date maxDate = filteredData.get(0).getDate();
+
+            for (Data item : filteredData)
+            {
+                if (dataItem.getDate().before(minDate))
+                {
+                    minDate = item.getDate();
+                }
+                if(dataItem.getDate().after(maxDate))
+                {
+                    maxDate = item.getDate();
+                }
+            }
+            System.out.println("Date to choose from from site: " + siteId+ ": " + minDate + " - " + maxDate);
+
+            LocalDate localMinDate = minDate.toLocalDate();
+            LocalDate localMaxDate = maxDate.toLocalDate();
+
+            datePicker.setDayCellFactory(d ->
+                    new DateCell() {
+                        @Override
+                        public void updateItem(LocalDate item, boolean empty) {
+                            super.updateItem(item, empty);
+                            setDisable(item.isAfter(localMaxDate) || item.isBefore(localMinDate));
+                        }
+                    });
+        }
+
+    }
+
     //Method to display Bar Chart
     @FXML
     public void displayBarChart() {
