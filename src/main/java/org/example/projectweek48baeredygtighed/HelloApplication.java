@@ -11,7 +11,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 448);
+        Scene scene = new Scene(fxmlLoader.load(), 872.0, 1195.0);
         stage.setTitle("Solar energy");
         stage.setScene(scene);
         stage.show();
