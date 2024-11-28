@@ -15,6 +15,21 @@
          <font>
             <Font name="System Bold" size="20.0" />
          </font></Label>
+      <GridPane prefHeight="25.0" prefWidth="701.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="417.0" text="Total of 1 mrd." />
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="482.0" text="Over time" GridPane.columnIndex="1" />
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="347.0" text="PieChart total" GridPane.columnIndex="2" />
+         </children>
+      </GridPane>
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
             <BarChart fx:id="barChart">
