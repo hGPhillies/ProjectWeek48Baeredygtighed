@@ -285,7 +285,6 @@ public class HelloController {
         /*
         Clears the date in the barChart and adds data to the barChart.
          */
-        //barChart.getData().clear();
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Total for " + selectedDate.getMonth() + " " + selectedYear);
         series.getData().add(new XYChart.Data<>("Site ID: " + siteId, totalForMonth));
