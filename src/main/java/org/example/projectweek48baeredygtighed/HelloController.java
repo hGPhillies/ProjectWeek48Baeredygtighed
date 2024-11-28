@@ -2,8 +2,10 @@ package org.example.projectweek48baeredygtighed;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Side;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.chart.BarChart;
@@ -33,6 +35,9 @@ public class HelloController {
     @FXML
     private VBox vBox;
 
+    @FXML
+    private DatePicker datePicker;
+
     private ArrayList<Data> dataArrayList;
 
     //A list of each site ID to be used in the combobox as the option menu to select from
@@ -47,7 +52,7 @@ public class HelloController {
     {
         // gets the data from the source. Should ALWAYS be first.
         updateDataFromSource();
-        printAllData();
+
         addFilterToComboBoxes(siteIdOneCombo);
         addFilterToComboBoxes(siteIdTwoCombo);
 
@@ -237,19 +242,38 @@ public class HelloController {
     @FXML
     public void displayLineChart() {
 
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        series.setName("Online Data");
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Production for " + datePicker.getValue());
 
-        int largestNum = 0;
+        boolean dataExists = false;
 
-        for (Data dataItem : dataArrayList) {
-            if (dataItem.getSiteId() == Integer.parseInt(siteIdTwoCombo.getValue())) {
-                if (dataItem.getDate().toString().equalsIgnoreCase("2023-02-13")) {
-                    if (dataItem.getOnline() > largestNum) {
-                        largestNum = dataItem.getOnline();
+        try {
+            for (Data dataItem : dataArrayList) {
+                if (dataItem.getSiteId() == Integer.parseInt(siteIdTwoCombo.getValue())) {
+                    if (dataItem.getDate().toString().equalsIgnoreCase(String.valueOf(datePicker.getValue()))) {
+                        series.getData().add(new XYChart.Data<>(String.valueOf(dataItem.getHour()), dataItem.getOnline()));
+                        dataExists = true;
                     }
                 }
             }
+        }
+        catch (Exception e) {
+            System.out.println("Something went wrong");
+            System.out.print(e.getMessage());
+        }
+
+
+        if (dataExists) {
+            lineChart.setAnimated(false);
+            lineChart.getData().add(series);
+            lineChart.setTitleSide(Side.RIGHT);
+            lineChart.setTitle("W/h");
+            lineChart.setTitleSide(Side.BOTTOM);
+            lineChart.setTitle("Hours");
+        }
+        else
+        {
+            System.out.println("The given Site does not have this date: " + datePicker.getValue());
         }
     }
 }
