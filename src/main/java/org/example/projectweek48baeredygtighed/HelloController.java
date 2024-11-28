@@ -8,13 +8,16 @@ import javafx.geometry.Side;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.TextArea;
 
+import java.awt.*;
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
@@ -39,13 +42,8 @@ public class HelloController {
     TextArea textArea;
     @FXML
     DatePicker datePicker;
-
-
     @FXML
     private VBox vBox;
-
-    @FXML
-    private DatePicker datePicker;
 
     private ArrayList<Data> dataArrayList;
 
@@ -61,6 +59,7 @@ public class HelloController {
     {
         // gets the data from the source. Should ALWAYS be first.
         updateDataFromSource();
+        getDateMonth();
 
         addFilterToComboBoxes(siteIdOneCombo);
         addFilterToComboBoxes(siteIdTwoCombo);
@@ -155,6 +154,22 @@ public class HelloController {
         });
     }
 
+    @FXML
+    public void getDateMonth()
+    {
+        Date minDate;
+        Date maxDate;
+
+        minDate = Date.valueOf(LocalDate.of(2022, 12, 15));
+        maxDate = Date.valueOf(LocalDate.of(2023, 2, 14));
+        datePicker.setDayCellFactory(d ->
+                new DateCell() {
+                    @Override public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+                        setDisable(item.isAfter(maxDate.toLocalDate()) || item.isBefore(minDate.toLocalDate()));
+                    }});
+        //textArea.setText(formattedDate);
+    }
 
     /**
      * Reads the SolarData.tsv file and adds all records to the dataArrayList ArrayList.
@@ -315,9 +330,6 @@ public class HelloController {
 
         // Add data to the PieChart
         pieChart.getData().addAll(siteOneData, siteTwoData);
-    }
-
-
     }
 
     @FXML
