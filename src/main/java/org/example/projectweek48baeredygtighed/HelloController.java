@@ -232,24 +232,35 @@ public class HelloController {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Production for " + datePicker.getValue());
 
-        for (Data dataItem : dataArrayList) {
-            if (dataItem.getSiteId() == Integer.parseInt(siteIdTwoCombo.getValue())) {
-                System.out.println("" + dataItem.getDate() + " " + datePicker.getValue());
-                if (dataItem.getDate().toString().equalsIgnoreCase(String.valueOf(datePicker.getValue()))) {
-                    series.getData().add(new XYChart.Data<>(String.valueOf(dataItem.getHour()), dataItem.getOnline()));
-                    System.out.println("Added data: " + dataItem.getHour() + ", " + dataItem.getOnline());
+        boolean dataExists = false;
+
+        try {
+            for (Data dataItem : dataArrayList) {
+                if (dataItem.getSiteId() == Integer.parseInt(siteIdTwoCombo.getValue())) {
+                    if (dataItem.getDate().toString().equalsIgnoreCase(String.valueOf(datePicker.getValue()))) {
+                        series.getData().add(new XYChart.Data<>(String.valueOf(dataItem.getHour()), dataItem.getOnline()));
+                        dataExists = true;
+                    }
                 }
             }
         }
+        catch (Exception e) {
+            System.out.println("Something went wrong");
+            System.out.print(e.getMessage());
+        }
 
-        //series.getData().add(new XYChart.Data<>(String.valueOf(Integer.parseInt(siteIdOneCombo.getValue())), largestNum));
 
-        lineChart.setAnimated(false);
-        lineChart.getData().add(series);
-        lineChart.setLayoutX(0);
-        lineChart.setTitleSide(Side.LEFT);
-        lineChart.setTitle("W/h");
-        lineChart.setTitleSide(Side.BOTTOM);
-        lineChart.setTitle("Timer");
+        if (dataExists) {
+            lineChart.setAnimated(false);
+            lineChart.getData().add(series);
+            lineChart.setTitleSide(Side.RIGHT);
+            lineChart.setTitle("W/h");
+            lineChart.setTitleSide(Side.BOTTOM);
+            lineChart.setTitle("Hours");
+        }
+        else
+        {
+            System.out.println("The given Site does not have this date: " + datePicker.getValue());
+        }
     }
 }
