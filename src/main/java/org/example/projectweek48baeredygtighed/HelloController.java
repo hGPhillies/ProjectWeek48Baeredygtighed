@@ -2,9 +2,7 @@ package org.example.projectweek48baeredygtighed;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
@@ -27,6 +25,10 @@ public class HelloController {
     LineChart<String, Number> lineChart;
     @FXML
     Button clearButton,goButton;
+    @FXML
+    TextArea textArea;
+    @FXML
+    DatePicker datePicker;
 
     @FXML
     private VBox vBox;
@@ -60,6 +62,7 @@ public class HelloController {
     {
         displayBarChart();
         displayLineChart();
+        displayTextArea();
     }
 
     @FXML
@@ -238,5 +241,33 @@ public class HelloController {
                 }
             }
         }
+    }
+
+    @FXML
+    public void displayTextArea()
+    {
+        ArrayList<Data> matches = new ArrayList<>();
+        for (Data dataItem : dataArrayList)
+        {
+            if(dataItem.getSiteId() == Integer.parseInt(siteIdOneCombo.getValue()))
+            {
+               if (dataItem.getDate().toString().equalsIgnoreCase(datePicker.getValue().toString()))
+               {
+                   matches.add(dataItem);
+               }
+            }
+        }
+        int count =0;
+        int sumProduction =0;
+        double resultAvg = 0;
+
+        for (Data dataItem : matches)
+        {
+            count++;
+            sumProduction += dataItem.getOnline();
+        }
+        resultAvg = (double) sumProduction / count;
+
+        textArea.setText("The average procuction is: " + resultAvg);
     }
 }
