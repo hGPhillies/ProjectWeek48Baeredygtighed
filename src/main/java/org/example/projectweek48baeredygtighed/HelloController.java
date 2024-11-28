@@ -240,10 +240,6 @@ public class HelloController {
         if (dataExists) {
             lineChart.setAnimated(false);
             lineChart.getData().add(series);
-            lineChart.setTitleSide(Side.RIGHT);
-            lineChart.setTitle("W/h");
-            lineChart.setTitleSide(Side.BOTTOM);
-            lineChart.setTitle("Hours");
         }
         else
         {
@@ -256,11 +252,17 @@ public class HelloController {
         textArea.clear();
         String selectedSiteIdOne = siteIdOneCombo.getValue();
         if (selectedSiteIdOne != null) {
+            int sumProduction = 0;
+            int count = 0;
             for (Data dataItem : dataArrayList) {
                 if (dataItem.getSiteId() == Integer.parseInt(selectedSiteIdOne)) {
-                    textArea.appendText(dataItem.toString() + "\n");
+                    if (dataItem.getDate().toString().equalsIgnoreCase(String.valueOf(datePicker.getValue()))) {
+                        sumProduction += dataItem.getOnline();
+                        count++;
+                    }
                 }
             }
+            textArea.appendText("Average production: " + sumProduction/count);
         }
     }
 
