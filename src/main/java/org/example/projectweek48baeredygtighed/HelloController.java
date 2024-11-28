@@ -47,9 +47,6 @@ public class HelloController {
     @FXML
     private VBox vBox;
 
-
-    private ArrayList<Data> dataArrayList;
-
     //A list of each site ID to be used in the combobox as the option menu to select from
     List<String> siteIds = List.of("298", "2506", "15523", "16008", "16009", "16010", "16011", "16012", "16013", "16014", "16015", "16016",
             "16017", "16018", "16019", "16020", "16021", "16022", "16023", "16024", "16025", "22224", "22229", "41460", "54280", "54282", "54284",
@@ -60,7 +57,7 @@ public class HelloController {
     @FXML
     public void initialize() {
         // Gets the data from the source. Should ALWAYS be first.
-        updateDataFromSource();
+        DataHandler.updateDataFromSource();
 
         addFilterToComboBoxes(siteIdOneCombo);
 
@@ -134,72 +131,6 @@ public class HelloController {
         });
     }
 
-
-    /**
-     * Reads the SolarData.tsv file and adds all records to the dataArrayList ArrayList.
-     * Gives error "Something went wrong" if the file is not found.
-     */
-    private void updateDataFromSource() {
-        dataArrayList = new ArrayList<>();
-
-        // tries to get the file.
-        try (BufferedReader TSVReader = new BufferedReader(new FileReader("src/main/resources/org/example/projectweek48baeredygtighed/SolarData.tsv"))) {
-            String line;
-            while ((line = TSVReader.readLine()) != null) { // if there are more lines/records it continues.
-                String[] lineItems = line.split("\t"); // splits the record into its column.
-
-                Data entry = new Data(); // makes a Data object for adding the data to.
-
-                entry.setId(Integer.parseInt(lineItems[0])); // Sets the ID of the entry to the first column in the record.
-
-                // Converts the Date column to two separate strings, representing the date and time.
-                StringBuilder date = new StringBuilder();
-                StringBuilder time = new StringBuilder();
-                boolean isDate = true;
-                for (char c : lineItems[1].toCharArray()) {
-                    if (c == 'T') {
-                        isDate = false;
-                    } else if (isDate) {
-                        date.append(c);
-                    } else {
-                        time.append(c);
-                    }
-
-                }
-
-                Date dateObj = Date.valueOf(date.toString()); // Converts the date string into a Date object.
-
-                entry.setDate(dateObj); // sets the date of the entry to the found date.
-
-                entry.setHour(Integer.parseInt(time.substring(0, 2))); // sets the hour from the time string.
-
-                entry.setSiteId(Integer.parseInt(lineItems[2])); // sets SiteId from the third column.
-
-                entry.setTotal(Integer.parseInt(lineItems[3])); // sets total production to the data from the fourth column
-
-                entry.setOnline(Integer.parseInt(lineItems[4])); // sets Online production to the data from the fifth column
-
-                entry.setOffline(Integer.parseInt(lineItems[5])); // sets Offline production to the data from the sixth column
-
-                dataArrayList.add(entry); // Adds the entry to the ArrayList containing all records.
-            }
-        } catch (Exception e) {
-            System.out.println("Something went wrong");
-            System.out.println(e.getMessage());
-        }
-    }
-
-    /**
-     * Prints all data information in the console.
-     */
-    private void printAllData() {
-        for (Data dataItem : dataArrayList) {
-            System.out.println(dataItem.getId() + "\t" + dataItem.getDate() + "\t" + dataItem.getHour() + "\t" + dataItem.getSiteId() +
-                    "\t" + dataItem.getTotal() + "\t" + dataItem.getOnline() + "\t" + dataItem.getOffline());
-        }
-    }
-
-
     /**
      * A method that grey scales the dates where the site has not been active.
      */
@@ -218,7 +149,7 @@ public class HelloController {
 
         //Stores another arraylist with the filtered results from the site ids based on the dataArrayList.
         ArrayList<Data> filteredData = new ArrayList<>();
-        for (Data resultFilter : dataArrayList) {
+        for (Data resultFilter : DataHandler.dataArrayList) {
             if (resultFilter.getSiteId() == siteId) {
                 filteredData.add(resultFilter);
             }
@@ -273,7 +204,7 @@ public class HelloController {
         int totalForMonth = 0; //A variable that holds the sum for the month
 
         //A loop that sorts through the filtered data for the chosen site, month and year and adds all the data together.
-        for (Data monthFilter : dataArrayList) {
+        for (Data monthFilter : DataHandler.dataArrayList) {
             if (monthFilter.getSiteId() == siteId) {
                 LocalDate dataDate = monthFilter.getDate().toLocalDate();
                 if (dataDate.getYear() == selectedYear && dataDate.getMonthValue() == selectedMonth)
@@ -302,7 +233,7 @@ public class HelloController {
 
         int largestNum = 0;
 
-        for (Data dataItem : dataArrayList) {
+        for (Data dataItem : DataHandler.dataArrayList) {
             if (dataItem.getSiteId() == Integer.parseInt(siteIdOneCombo.getValue())) {
                 if (dataItem.getDate().toString().equalsIgnoreCase("2023-02-13")) {
                     if (dataItem.getTotal() > largestNum) {
@@ -328,7 +259,7 @@ public class HelloController {
         boolean dataExists = false;
 
         try {
-            for (Data dataItem : dataArrayList) {
+            for (Data dataItem : DataHandler.dataArrayList) {
                 if (dataItem.getSiteId() == Integer.parseInt(siteIdOneCombo.getValue())) {
                     if (dataItem.getDate().toString().equalsIgnoreCase(String.valueOf(datePicker.getValue()))) {
                         series.getData().add(new XYChart.Data<>(String.valueOf(dataItem.getHour()), dataItem.getOnline()));
@@ -360,7 +291,7 @@ public class HelloController {
         if (selectedSiteIdOne != null) {
             int sumProduction = 0;
             int count = 0;
-            for (Data dataItem : dataArrayList) {
+            for (Data dataItem : DataHandler.dataArrayList) {
                 if (dataItem.getSiteId() == Integer.parseInt(selectedSiteIdOne)) {
                     if (dataItem.getDate().toString().equalsIgnoreCase(String.valueOf(datePicker.getValue()))) {
                         sumProduction += dataItem.getOnline();
@@ -385,7 +316,7 @@ public class HelloController {
             int totalForSelectedSite = 0;
 
             // Iterate through dataArrayList and calculate the total for the selected site
-            for (Data dataItem : dataArrayList) {
+            for (Data dataItem : DataHandler.dataArrayList) {
                 if (dataItem.getSiteId() == selectedSiteId) {
                     totalForSelectedSite += dataItem.getTotal(); // Sum the 'total' for each data item
                 }
