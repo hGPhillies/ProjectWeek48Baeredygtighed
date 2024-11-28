@@ -2,18 +2,13 @@ package org.example.projectweek48baeredygtighed;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
 import javafx.scene.chart.PieChart;
-import javafx.geometry.Side;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-
+import javafx.scene.control.*;
+import javafx.geometry.Side;
+import javafx.scene.layout.VBox;
 import java.io.*;
 import java.util.ArrayList;
 import java.sql.Date;
@@ -26,7 +21,7 @@ import java.util.List;
 
 public class HelloController {
     @FXML
-    ComboBox<String> siteIdOneCombo, siteIdTwoCombo;
+    ComboBox<String> siteIdOneCombo; // Removed siteIdTwoCombo
     @FXML
     BarChart<String, Number> barChart;
     @FXML
@@ -34,18 +29,14 @@ public class HelloController {
     @FXML
     PieChart pieChart;
     @FXML
-    Button clearButton,goButton;
+    Button clearButton, goButton;
     @FXML
     TextArea textArea;
     @FXML
     DatePicker datePicker;
-
-
     @FXML
     private VBox vBox;
 
-    @FXML
-    private DatePicker datePicker;
 
     private ArrayList<Data> dataArrayList;
 
@@ -57,25 +48,19 @@ public class HelloController {
             "57124", "57126", "60127", "60129", "60131", "82445", "84671", "84673", "87887", "87891", "88062", "88262", "88990", "92029");
 
     @FXML
-    public void initialize()
-    {
-        // gets the data from the source. Should ALWAYS be first.
+    public void initialize() {
+        // Gets the data from the source. Should ALWAYS be first.
         updateDataFromSource();
 
         addFilterToComboBoxes(siteIdOneCombo);
-        addFilterToComboBoxes(siteIdTwoCombo);
 
-        //Adds each site ID from "siteIds" to comboBox one as selection options
+        // Adds each site ID from "siteIds" to comboBox one as selection options
         siteIdOneCombo.setItems(FXCollections.observableArrayList(siteIds));
-        siteIdOneCombo.setEditable(true); //Enables the ComboBox to allow text input.
-        //Adds each site ID from "siteIds" to comboBox one as selection options
-        siteIdTwoCombo.setItems(FXCollections.observableArrayList(siteIds));
-        siteIdTwoCombo.setEditable(true); //Enables the ComboBox to allow text input.
+        siteIdOneCombo.setEditable(true); // Enables the ComboBox to allow text input
     }
 
     @FXML
-    public void goButton()
-    {
+    public void goButton() {
         displayBarChart();
         displayLineChart();
         displayTextArea();
@@ -83,8 +68,7 @@ public class HelloController {
     }
 
     @FXML
-    public void buttonClear()
-    {
+    public void buttonClear() {
         lineChart.getData().clear();
         barChart.getData().clear();
         pieChart.getData().clear();
@@ -95,45 +79,31 @@ public class HelloController {
      * made an input with a valid site id.
      */
     @FXML
-    public void chooseSiteID()
-    {
+    public void chooseSiteID() {
         String selectedSiteIdOne = siteIdOneCombo.getValue();
-        String selectedSiteIdTwo = siteIdTwoCombo.getValue();
-
-        if(selectedSiteIdOne != null && !selectedSiteIdOne.isEmpty())
-        {
+        if (selectedSiteIdOne != null && !selectedSiteIdOne.isEmpty()) {
             System.out.println("Chosen site ID: " + selectedSiteIdOne);
         }
-
-        if(selectedSiteIdTwo != null && !selectedSiteIdTwo.isEmpty())
-        {
-            System.out.println("Chosen site ID: " + selectedSiteIdTwo);
-        }
-
     }
 
     /**
      * Ensures that the user can filter the predefined site IDs based on the input entered in the combobox.
+     *
      * @param comboFilter Where the filtering functionality and event handling will be added.
      */
-    public void addFilterToComboBoxes(ComboBox<String> comboFilter)
-    {
+    public void addFilterToComboBoxes(ComboBox<String> comboFilter) {
         List<String> originalSiteIDs = new ArrayList<>(siteIds); //Provides a new list with the original site ids
 
         //Adds a listener to the comboboxes that checks user input and uses it for filtering.
         comboFilter.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null || newValue.isEmpty())
-            {
+            if (newValue == null || newValue.isEmpty()) {
                 comboFilter.setItems(FXCollections.observableArrayList(originalSiteIDs)); //The full list of site ids are shown when the comboboxes are empty.
-            }
-            else //When the user makes input in the combobox a new list with the filtered site ids are made and displayed to the user
+            } else //When the user makes input in the combobox a new list with the filtered site ids are made and displayed to the user
             {
                 String input = newValue.toLowerCase();
                 List<String> filteredSiteIDs = new ArrayList<>();
-                for (String site : originalSiteIDs)
-                {
-                    if (site.toLowerCase().startsWith(input))
-                    {
+                for (String site : originalSiteIDs) {
+                    if (site.toLowerCase().startsWith(input)) {
                         filteredSiteIDs.add(site);
                     }
                 }
@@ -144,12 +114,10 @@ public class HelloController {
 
         comboFilter.setOnAction(event -> { //Displays in the console whether the user has entered a valid site id or not.
             String selectedItem = comboFilter.getValue();
-            if (!originalSiteIDs.contains(selectedItem))
-            {
+            if (!originalSiteIDs.contains(selectedItem)) {
                 System.out.println("Invalid choice: " + selectedItem);
                 comboFilter.setValue(null);
-            } else
-            {
+            } else {
                 System.out.println("Valid choice from " + comboFilter.getId() + ": " + selectedItem);
             }
         });
@@ -160,8 +128,7 @@ public class HelloController {
      * Reads the SolarData.tsv file and adds all records to the dataArrayList ArrayList.
      * Gives error "Something went wrong" if the file is not found.
      */
-    private void updateDataFromSource()
-    {
+    private void updateDataFromSource() {
         dataArrayList = new ArrayList<>();
 
         // tries to get the file.
@@ -178,18 +145,12 @@ public class HelloController {
                 StringBuilder date = new StringBuilder();
                 StringBuilder time = new StringBuilder();
                 boolean isDate = true;
-                for (char c : lineItems[1].toCharArray())
-                {
-                    if (c == 'T')
-                    {
+                for (char c : lineItems[1].toCharArray()) {
+                    if (c == 'T') {
                         isDate = false;
-                    }
-                    else if (isDate)
-                    {
+                    } else if (isDate) {
                         date.append(c);
-                    }
-                    else
-                    {
+                    } else {
                         time.append(c);
                     }
 
@@ -220,14 +181,13 @@ public class HelloController {
     /**
      * Prints all data information in the console.
      */
-    private void printAllData()
-    {
-        for (Data dataItem : dataArrayList)
-        {
+    private void printAllData() {
+        for (Data dataItem : dataArrayList) {
             System.out.println(dataItem.getId() + "\t" + dataItem.getDate() + "\t" + dataItem.getHour() + "\t" + dataItem.getSiteId() +
                     "\t" + dataItem.getTotal() + "\t" + dataItem.getOnline() + "\t" + dataItem.getOffline());
         }
     }
+
     //Method to display Bar Chart
     @FXML
     public void displayBarChart() {
@@ -253,7 +213,6 @@ public class HelloController {
 
     @FXML
     public void displayLineChart() {
-
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Production for " + datePicker.getValue());
 
@@ -261,90 +220,65 @@ public class HelloController {
 
         try {
             for (Data dataItem : dataArrayList) {
-                if (dataItem.getSiteId() == Integer.parseInt(siteIdTwoCombo.getValue())) {
-                    if (dataItem.getDate().toString().equalsIgnoreCase(String.valueOf(datePicker.getValue()))) {
-                        series.getData().add(new XYChart.Data<>(String.valueOf(dataItem.getHour()), dataItem.getOnline()));
-                        dataExists = true;
-                    }
+                if (dataItem.getSiteId() == Integer.parseInt(siteIdOneCombo.getValue()) &&
+                        dataItem.getDate().toString().equalsIgnoreCase(datePicker.getValue().toString())) {
+                    series.getData().add(new XYChart.Data<>(String.valueOf(dataItem.getHour()), dataItem.getTotal()));
+                    dataExists = true;
+                }
+            }
+            if (dataExists) {
+                lineChart.setAnimated(false);
+                lineChart.getData().add(series);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @FXML
+    public void displayTextArea() {
+        textArea.clear();
+        String selectedSiteIdOne = siteIdOneCombo.getValue();
+        if (selectedSiteIdOne != null) {
+            for (Data dataItem : dataArrayList) {
+                if (dataItem.getSiteId() == Integer.parseInt(selectedSiteIdOne)) {
+                    textArea.appendText(dataItem.toString() + "\n");
                 }
             }
         }
-        catch (Exception e) {
-            System.out.println("Something went wrong");
-            System.out.print(e.getMessage());
-        }
-
-
-        if (dataExists) {
-            lineChart.setAnimated(false);
-            lineChart.getData().add(series);
-            lineChart.setTitleSide(Side.RIGHT);
-            lineChart.setTitle("W/h");
-            lineChart.setTitleSide(Side.BOTTOM);
-            lineChart.setTitle("Hours");
-        }
-        else
-        {
-            System.out.println("The given Site does not have this date: " + datePicker.getValue());
-        }
     }
+
     @FXML
     public void displayPieChart() {
-        // Get selected site IDs
+        // Get the selected site ID from ComboBox
         String selectedSiteIdOne = siteIdOneCombo.getValue();
-        String selectedSiteIdTwo = siteIdTwoCombo.getValue();
 
+        if (selectedSiteIdOne != null) {
+            // Parse the selected site ID to an integer
+            int selectedSiteId = Integer.parseInt(selectedSiteIdOne);
 
-        // Variables to store total values for the selected site IDs
-        int totalSiteOne = 0;
-        int totalSiteTwo = 0;
+            // Initialize the total for the selected site
+            int totalForSelectedSite = 0;
 
-        // Calculate totals for each site
-        for (Data dataItem : dataArrayList) {
-            if (dataItem.getSiteId() == Integer.parseInt(selectedSiteIdOne)) {
-                totalSiteOne += dataItem.getTotal();
+            // Iterate through dataArrayList and calculate the total for the selected site
+            for (Data dataItem : dataArrayList) {
+                if (dataItem.getSiteId() == selectedSiteId) {
+                    totalForSelectedSite += dataItem.getTotal(); // Sum the 'total' for each data item
+                }
             }
-            if (dataItem.getSiteId() == Integer.parseInt(selectedSiteIdTwo)) {
-                totalSiteTwo += dataItem.getTotal();
-            }
+
+            // Create PieChart data for the total value of the selected site
+            PieChart.Data siteData = new PieChart.Data("Total for Site " + selectedSiteId, totalForSelectedSite);
+
+            // Clear existing pie chart data
+            //pieChart.getData().clear();
+
+            // Set the legend position (optional)
+            pieChart.setLegendSide(Side.BOTTOM);
+
+            // Add the new data to the pie chart
+            pieChart.getData().add(siteData);
         }
-
-        // Create PieChart data
-        PieChart.Data siteOneData = new PieChart.Data("Site " + selectedSiteIdOne, totalSiteOne);
-        PieChart.Data siteTwoData = new PieChart.Data("Site " + selectedSiteIdTwo, totalSiteTwo);
-
-        // Add data to the PieChart
-        pieChart.getData().addAll(siteOneData, siteTwoData);
     }
 
-
-    }
-
-    @FXML
-    public void displayTextArea()
-    {
-        ArrayList<Data> matches = new ArrayList<>();
-        for (Data dataItem : dataArrayList)
-        {
-            if(dataItem.getSiteId() == Integer.parseInt(siteIdOneCombo.getValue()))
-            {
-               if (dataItem.getDate().toString().equalsIgnoreCase(datePicker.getValue().toString()))
-               {
-                   matches.add(dataItem);
-               }
-            }
-        }
-        int count =0;
-        int sumProduction =0;
-        double resultAvg = 0;
-
-        for (Data dataItem : matches)
-        {
-            count++;
-            sumProduction += dataItem.getOnline();
-        }
-        resultAvg = (double) sumProduction / count;
-
-        textArea.setText("The average procuction is: " + resultAvg);
-    }
 }
