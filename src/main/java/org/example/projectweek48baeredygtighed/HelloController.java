@@ -18,12 +18,12 @@ import javafx.scene.control.TextArea;
 
 import java.awt.*;
 import java.io.*;
+import java.nio.channels.DatagramChannel;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
-
 
 /**
  * A program that is able to show the user different
@@ -59,6 +59,8 @@ public class HelloController {
         // Gets the data from the source. Should ALWAYS be first.
         DataHandler.updateDataFromSource();
 
+        getMonthCalc();
+
         addFilterToComboBoxes(siteIdOneCombo);
 
         // Adds each site ID from "siteIds" to comboBox one as selection options
@@ -72,7 +74,6 @@ public class HelloController {
         displayLineChart();
         displayTextArea();
         displayPieChart();
-        getMonthCalc();
     }
 
     @FXML
@@ -91,6 +92,7 @@ public class HelloController {
         String selectedSiteIdOne = siteIdOneCombo.getValue();
         if (selectedSiteIdOne != null && !selectedSiteIdOne.isEmpty()) {
             System.out.println("Chosen site ID: " + selectedSiteIdOne);
+            getMonthCalc();
         }
     }
 
@@ -213,16 +215,8 @@ public class HelloController {
                 }
             }
         }
-        /*
-        Clears the date in the barChart and adds data to the barChart.
-         */
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Total for " + selectedDate.getMonth() + " " + selectedYear);
-        series.getData().add(new XYChart.Data<>("Site ID: " + siteId, totalForMonth));
-        barChart.getData().add(series);
-
-        System.out.println("Total for Site " + siteId + " in " + selectedDate.getMonth() + " " + selectedYear + "is: " + totalForMonth + "kWh");
     }
+
 
 
     //Method to display Bar Chart
