@@ -2,8 +2,10 @@ package org.example.projectweek48baeredygtighed;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Side;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.chart.BarChart;
@@ -31,6 +33,9 @@ public class HelloController {
     @FXML
     private VBox vBox;
 
+    @FXML
+    private DatePicker datePicker;
+
     private ArrayList<Data> dataArrayList;
 
     List<String> siteIds = List.of("298", "2506", "15523", "16008", "16009", "16010", "16011", "16012", "16013", "16014", "16015", "16016",
@@ -44,7 +49,7 @@ public class HelloController {
     {
         // gets the data from the source. Should ALWAYS be first.
         updateDataFromSource();
-        printAllData();
+
         addFilterToComboBoxes(siteIdOneCombo);
         addFilterToComboBoxes(siteIdTwoCombo);
 
@@ -224,19 +229,27 @@ public class HelloController {
     @FXML
     public void displayLineChart() {
 
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        series.setName("Online Data");
-
-        int largestNum = 0;
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Production for " + datePicker.getValue());
 
         for (Data dataItem : dataArrayList) {
             if (dataItem.getSiteId() == Integer.parseInt(siteIdTwoCombo.getValue())) {
-                if (dataItem.getDate().toString().equalsIgnoreCase("2023-02-13")) {
-                    if (dataItem.getOnline() > largestNum) {
-                        largestNum = dataItem.getOnline();
-                    }
+                System.out.println("" + dataItem.getDate() + " " + datePicker.getValue());
+                if (dataItem.getDate().toString().equalsIgnoreCase(String.valueOf(datePicker.getValue()))) {
+                    series.getData().add(new XYChart.Data<>(String.valueOf(dataItem.getHour()), dataItem.getOnline()));
+                    System.out.println("Added data: " + dataItem.getHour() + ", " + dataItem.getOnline());
                 }
             }
         }
+
+        //series.getData().add(new XYChart.Data<>(String.valueOf(Integer.parseInt(siteIdOneCombo.getValue())), largestNum));
+
+        lineChart.setAnimated(false);
+        lineChart.getData().add(series);
+        lineChart.setLayoutX(0);
+        lineChart.setTitleSide(Side.LEFT);
+        lineChart.setTitle("W/h");
+        lineChart.setTitleSide(Side.BOTTOM);
+        lineChart.setTitle("Timer");
     }
 }
