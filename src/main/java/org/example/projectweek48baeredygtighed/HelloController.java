@@ -223,7 +223,7 @@ public class HelloController {
     @FXML
     public void displayBarChart() {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Total Data");
+        series.setName("Site: " + siteIdOneCombo.getValue());
 
         int sumProduction = 0; // For the month.
 
