@@ -225,19 +225,20 @@ public class HelloController {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Total Data");
 
-        int largestNum = 0;
+        int sumProduction = 0; // For the month.
 
         for (Data dataItem : DataHandler.dataArrayList) {
             if (dataItem.getSiteId() == Integer.parseInt(siteIdOneCombo.getValue())) {
-                if (dataItem.getDate().toString().equalsIgnoreCase("2023-02-13")) {
-                    if (dataItem.getTotal() > largestNum) {
-                        largestNum = dataItem.getTotal();
+                if (dataItem.getDate().toLocalDate().getMonth() == datePicker.getValue().getMonth()) {
+                    if (dataItem.getDate().toLocalDate().getYear() == datePicker.getValue().getYear())
+                    {
+                        sumProduction += dataItem.getOnline();
                     }
                 }
             }
         }
 
-        series.getData().add(new XYChart.Data<>(String.valueOf(Integer.parseInt(siteIdOneCombo.getValue())), largestNum));
+        series.getData().add(new XYChart.Data<>(String.valueOf(Integer.parseInt(siteIdOneCombo.getValue())), sumProduction));
         barChart.setAnimated(false);
         barChart.getData().add(series);
     }
@@ -322,7 +323,7 @@ public class HelloController {
             // Clear existing pie chart data
             //pieChart.getData().clear();
 
-            // Set the legend position (optional)
+            // Set the legend position
             pieChart.setLegendSide(Side.BOTTOM);
 
             // Add the new data to the pie chart
